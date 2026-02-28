@@ -13,7 +13,7 @@ from pathlib import Path
 def _read_config(path: Path) -> dict:
     config = {}
     if path.exists():
-        for line in path.read_text().splitlines():
+        for line in path.read_text(encoding='utf-8', errors='replace').splitlines():
             line = line.strip()
             if "=" in line and not line.startswith("#"):
                 k, v = line.split("=", 1)
@@ -22,10 +22,10 @@ def _read_config(path: Path) -> dict:
 
 
 def _write_config(path: Path, config: dict) -> None:
-    lines = ["# Auto-generated — do not edit manually", ""]
+    lines = ["# Auto-generated - do not edit manually", ""]
     for k, v in config.items():
         lines.append(f"{k} = {v}")
-    path.write_text("\n".join(lines) + "\n")
+    path.write_text("\n".join(lines) + "\n", encoding='utf-8')
 
 
 def check_and_refresh_date_config(

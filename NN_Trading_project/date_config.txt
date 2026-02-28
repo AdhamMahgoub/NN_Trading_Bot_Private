@@ -1,8 +1,8 @@
-# Auto-generated — do not edit manually
+# Auto-generated - do not edit manually
 
 INTERVAL = 1d
 START_DATE = 2025-01-01
-END_DATE = 2026-02-27
+END_DATE = 2026-02-28
 TRAIN_END_DATE = 2025-11-30
 VAL_END_DATE = 2026-01-20
 EXCLUDE_START_DATE = 2018-09-01
