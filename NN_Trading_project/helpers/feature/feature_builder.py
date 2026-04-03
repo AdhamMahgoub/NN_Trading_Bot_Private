@@ -6,7 +6,7 @@ Feature engineering and cache utilities.
 Public API
 ----------
 featurize_one_csv(csv_path, window, horizon_bars, profit_threshold,
-                  stop_loss, exclude_start, exclude_end)
+                  stop_loss)
     -> (X, y, dates) | None
 
 compute_engineered_features(df, window)
@@ -14,7 +14,7 @@ compute_engineered_features(df, window)
 
 precompute_and_cache(files, window, cache_dir, scaler_path, index_path,
                      horizon_bars, train_end_date, val_end_date,
-                     profit_threshold, stop_loss, exclude_start, exclude_end)
+                     profit_threshold, stop_loss)
     -> (scaler, index)
 """
 
@@ -266,8 +266,6 @@ def featurize_one_csv(
     horizon_bars: int,
     profit_threshold: float,
     stop_loss: float,
-    exclude_start: str,
-    exclude_end: str,
 ):
     """Build (X, y, dates) for one ticker CSV.
 
@@ -301,13 +299,6 @@ def featurize_one_csv(
     if len(df) < max(window + horizon + 2, 2):
         return None
 
-    # Exclusion mask — bars in the excluded range (plus their forward look-ahead) are dropped
-    excl_s = pd.to_datetime(exclude_start)
-    excl_e = pd.to_datetime(exclude_end)
-    in_excl     = (df["Date"] >= excl_s) & (df["Date"] <= excl_e)
-    excl_future = in_excl[::-1].rolling(horizon + 1, min_periods=1).max()[::-1].astype(bool)
-    df["__excl__"] = excl_future
-
     # Labels
     df["y"] = _build_labels(df, horizon, profit_threshold, stop_loss)
 
@@ -317,17 +308,16 @@ def featurize_one_csv(
         {
             "__row_index__": np.arange(len(df), dtype=np.int64),
             "y": df["y"].to_numpy(copy=False),
-            "__excl__": df["__excl__"].to_numpy(copy=False),
         }
     )
     out = features.merge(labels, on="__row_index__", how="left").drop(columns=["__row_index__"])
     out = out.dropna(subset=["y"]).dropna(axis=0)
-    out = out[~out["__excl__"]].reset_index(drop=True)
+    out = out.reset_index(drop=True)
     if len(out) < 2:
         return None
 
     dates = out["Date"].to_numpy(dtype="datetime64[ns]")
-    X     = out.drop(columns=["Date", "y", "__excl__"]).to_numpy(dtype=np.float32, copy=True)
+    X     = out.drop(columns=["Date", "y"]).to_numpy(dtype=np.float32, copy=True)
     y     = out["y"].to_numpy(dtype=np.float32, copy=True)
 
     if not np.isfinite(y).all():
@@ -351,8 +341,6 @@ def precompute_and_cache(
     val_end_date,
     profit_threshold: float,
     stop_loss: float,
-    exclude_start: str,
-    exclude_end: str,
 ):
     """Featurize all CSVs, fit a per-split-safe StandardScaler, and persist cache.
 
@@ -374,7 +362,7 @@ def precompute_and_cache(
     for i, f in enumerate(files, start=1):
         print(f"[Cache] ({i}/{len(files)}) {f.name}")
 
-        result = featurize_one_csv(f, window, horizon_bars, profit_threshold, stop_loss, exclude_start, exclude_end)
+        result = featurize_one_csv(f, window, horizon_bars, profit_threshold, stop_loss)
         if result is None:
             skipped += 1
             continue
