@@ -1,0 +1,8 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "/^cmd /c \"mkdir \"\"c:\\\\Users\\\\adham\\\\OneDrive\\\\Desktop\\\\NN_Trading_Bot_Private\\\\NN_Trading_project\\\\helpers\"\" & move \"\"c:\\\\Users\\\\adham\\\\OneDrive\\\\Desktop\\\\NN_Trading_Bot_Private\\\\NN_Trading_project\\\\date_config_manager\\.py\"\" \"\"c:\\\\Users\\\\adham\\\\OneDrive\\\\Desktop\\\\NN_Trading_Bot_Private\\\\NN_Trading_project\\\\helpers\\\\\"\"\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}

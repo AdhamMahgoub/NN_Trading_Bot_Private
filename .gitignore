@@ -1,0 +1,7 @@
+# Generated artifacts in NN_Trading_project
+NN_Trading_project/.feature*/
+NN_Trading_project/dataset/
+NN_Trading_project/date_config.txt
+NN_Trading_project/wandb/
+NN_Trading_project/test_predictions_full.csv
+NN_Trading_project/run_output/
