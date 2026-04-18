@@ -2,6 +2,7 @@
 NN_Trading_project/A_Data_Gathering/date_config.txt
 NN_Trading_project/C_Dataset_Building/.feature*/
 NN_Trading_project/dataset/
+NN_Trading_project/A_Data_Gathering/dataset/
 NN_Trading_project/D_Models/run_output/
 NN_Trading_project/wandb/
 __pycache__/
