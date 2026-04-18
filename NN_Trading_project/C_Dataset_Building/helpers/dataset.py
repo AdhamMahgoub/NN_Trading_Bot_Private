@@ -5,7 +5,7 @@ PyTorch Dataset for the leakage-safe train/val/test stock splits.
 
 Usage
 -----
-    from helpers.dataset import StockDatasetSafe
+    from C_Dataset_Building.helpers.dataset import StockDatasetSafe
 
     train_ds = StockDatasetSafe(index, scaler, "train")
     val_ds   = StockDatasetSafe(index, scaler, "val")

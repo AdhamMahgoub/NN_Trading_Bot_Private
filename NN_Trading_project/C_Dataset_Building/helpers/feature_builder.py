@@ -25,7 +25,7 @@ import numpy as np
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 
-from helpers.feature.ta_indicators import add_ta_features, atr
+from .ta_indicators import add_ta_features, atr
 
 # ──────────────────────────────────────────────────────────────────────────────
 # Feature columns used by the model (order matters — kept stable here)
